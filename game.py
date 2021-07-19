@@ -12,12 +12,14 @@ pygame.display.set_caption('A Bit Racey')
 
 black = (0, 0, 0)
 white = (255, 255, 255)
+red = (255, 0, 0)
 # colors
 
 clock = pygame.time.Clock()
 crashed = False
 carImg = pygame.image.load('racecar.png')
-# loads clock, crash detection and car sprite
+carWidth = 73
+# loads clock, crash detection, car sprite and car sprite width (for hitboxes)
 
 
 def car(x, y):
@@ -27,35 +29,49 @@ def car(x, y):
 
 x = (displayWidth * 0.45)
 y = (displayHeight * 0.8)
-xChange = 0
 carSpeed = 0
 # car starting points, change in x position and speed
 
 
 # Game function
-while not crashed:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            crashed = True
-        print(event)
+def game_loop():
+    x = (displayWidth * 0.45)
+    y = (displayHeight * 0.8)
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                xChange = -5
-            elif event.key == pygame.K_RIGHT:
-                xChange = 5
+    x_change = 0
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                xChange = 0
+    gameExit = False
 
-    x += xChange
+    while not gameExit:
 
-    gameDisplay.fill(white)
-    car(x, y)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
 
-    pygame.display.update()
-    clock.tick(60)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    x_change = -5
+                if event.key == pygame.K_RIGHT:
+                    x_change = 5
 
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    x_change = 0
+
+        x += x_change
+
+        gameDisplay.fill(white)
+        car(x, y)
+
+        if x > displayWidth - carWidth:
+            x = displayWidth - carWidth - 5
+        elif x < 0:
+            x = 5
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+game_loop()
 pygame.quit()
 quit()
