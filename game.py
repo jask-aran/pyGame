@@ -1,42 +1,53 @@
 import pygame
-# imports
+import time
 
 pygame.init()
-# initialise pygame
 
-displayWidth = 800
-displayHeight = 600
-gameDisplay = pygame.display.set_mode((displayWidth, displayHeight))
-pygame.display.set_caption('A Bit Racey')
-# set display size and name
+display_width = 800
+display_height = 600
 
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
-# colors
 
+car_width = 73
+
+gameDisplay = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('A bit Racey')
 clock = pygame.time.Clock()
-crashed = False
+
 carImg = pygame.image.load('racecar.png')
-carWidth = 73
-# loads clock, crash detection, car sprite and car sprite width (for hitboxes)
 
 
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
-# draw the car to the display
 
 
-x = (displayWidth * 0.45)
-y = (displayHeight * 0.8)
-carSpeed = 0
-# car starting points, change in x position and speed
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
 
 
-# Game function
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf', 115)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((display_width/2), (display_height/2))
+    gameDisplay.blit(TextSurf, TextRect)
+
+    pygame.display.update()
+
+    time.sleep(2)
+
+    game_loop()
+
+
+def crash():
+    message_display('You Crashed')
+
+
 def game_loop():
-    x = (displayWidth * 0.45)
-    y = (displayHeight * 0.8)
+    x = (display_width * 0.45)
+    y = (display_height * 0.8)
 
     x_change = 0
 
@@ -46,7 +57,8 @@ def game_loop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gameExit = True
+                pygame.quit()
+                quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -63,10 +75,8 @@ def game_loop():
         gameDisplay.fill(white)
         car(x, y)
 
-        if x > displayWidth - carWidth:
-            x = displayWidth - carWidth - 5
-        elif x < 0:
-            x = 5
+        if x > display_width - car_width or x < 0:
+            crash()
 
         pygame.display.update()
         clock.tick(60)
