@@ -27,7 +27,9 @@ def car(x, y):
 
 x = (displayWidth * 0.45)
 y = (displayHeight * 0.8)
-# car starting points
+xChange = 0
+carSpeed = 0
+# car starting points, change in x position and speed
 
 
 # Game function
@@ -36,6 +38,18 @@ while not crashed:
         if event.type == pygame.QUIT:
             crashed = True
         print(event)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                xChange = -5
+            elif event.key == pygame.K_RIGHT:
+                xChange = 5
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                xChange = 0
+
+    x += xChange
 
     gameDisplay.fill(white)
     car(x, y)
