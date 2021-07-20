@@ -61,6 +61,14 @@ def pipeDraw(pipes):
             screen.blit(pipeFlip, pipe)
 
 
+def collision(pipes):
+    for pipe in pipes:
+        if birdRect.colliderect(pipe):
+            print('collisionpipe')
+    if birdRect.top <= -100 or birdRect.bottom >= 900:
+        print('collisionends')
+
+
 # primary game loop
 while True:
     for event in pygame.event.get():
@@ -85,6 +93,7 @@ while True:
     birdMovement += gravity
     birdRect.centery += birdMovement
     screen.blit(birdSurface, birdRect)
+    collision(pipeList)
 
     # pipe moving
     pipeList = pipeMove(pipeList)
