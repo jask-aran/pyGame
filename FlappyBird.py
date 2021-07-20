@@ -1,22 +1,16 @@
 import pygame
 import sys
 
-
-def drawFloor():
-    screen.blit(floorSurface, (floor_xpos, 900))
-    screen.blit(floorSurface, (floor_xpos + 576, 900))
-
-
 # initialisation
 pygame.init()
 screen = pygame.display.set_mode((576, 1024))
 clock = pygame.time.Clock()
 
-# import and scale background image
-background = pygame.image.load('assets/background-day.png').convert()
-background = pygame.transform.scale2x(background)
+# import background
+backgroundSurface = pygame.image.load('assets/background-day.png').convert()
+backgroundSurface = pygame.transform.scale2x(backgroundSurface)
 
-# import and scale floor image
+# import floor
 floorSurface = pygame.image.load('assets/base.png').convert()
 floorSurface = pygame.transform.scale2x(floorSurface)
 floor_xpos = 0
@@ -29,6 +23,13 @@ birdRect = birdSurface.get_rect(center=(100, 512))
 gravity = 0.25
 birdMovement = 0
 
+
+# move the floor
+def drawFloor():
+    screen.blit(floorSurface, (floor_xpos, 900))
+    screen.blit(floorSurface, (floor_xpos + 576, 900))
+
+
 # primary game loop
 while True:
     for event in pygame.event.get():
@@ -36,22 +37,27 @@ while True:
             # force end
             pygame.quit()
             sys.exit()
+
         if event.type == pygame.KEYDOWN:
+            # jump on spacebar press
             if event.key == pygame.K_SPACE:
                 birdMovement = 0
                 birdMovement -= 8
+    # draw floor on screen
+    screen.blit(backgroundSurface, (0, 0))
 
-    screen.blit(background, (0, 0))
-
+    # pull bird down per frame
     birdMovement += gravity
     birdRect.centery += birdMovement
     screen.blit(birdSurface, birdRect)
 
+    # moove the floor back to the start when it leaves the screen
     floor_xpos -= 1
     drawFloor()
     if floor_xpos <= -576:
         floor_xpos = 0
 
+    # tick rate
     pygame.display.update()
     clock.tick(120)
 
