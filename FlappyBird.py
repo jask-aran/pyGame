@@ -31,6 +31,7 @@ pipeheight = [400, 600, 800]
 # Game Variables
 gravity = 0.25
 birdMovement = 0
+gameActive = True
 
 
 # move the floor
@@ -64,9 +65,11 @@ def pipeDraw(pipes):
 def collision(pipes):
     for pipe in pipes:
         if birdRect.colliderect(pipe):
-            print('collisionpipe')
+            return False
     if birdRect.top <= -100 or birdRect.bottom >= 900:
-        print('collisionends')
+        return False
+
+    return True
 
 
 # primary game loop
@@ -79,9 +82,15 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             # jump on spacebar press
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and gameActive:
                 birdMovement = 0
                 birdMovement -= 8
+            if event.key == pygame.K_SPACE and not gameActive:
+                gameActive = True
+                pipeList.clear()
+                birdMovement = 0
+                birdMovement -= 4
+                birdRect.center = (100, 512)
 
         if event.type == SPAWNPIPE:
             pipeList.extend(pipeCreate())
@@ -89,15 +98,17 @@ while True:
     # draw floor on screen
     screen.blit(backgroundSurface, (0, 0))
 
-    # pull bird down per frame
-    birdMovement += gravity
-    birdRect.centery += birdMovement
-    screen.blit(birdSurface, birdRect)
-    collision(pipeList)
+    if gameActive:
+        # pull bird down
+        birdMovement += gravity
+        birdRect.centery += birdMovement
+        screen.blit(birdSurface, birdRect)
+        collision(pipeList)
+        gameActive = collision(pipeList)
 
-    # pipe moving
-    pipeList = pipeMove(pipeList)
-    pipeDraw(pipeList)
+        # pipe moving
+        pipeList = pipeMove(pipeList)
+        pipeDraw(pipeList)
 
     # moove the floor back to the start when it leaves the screen
     floor_xpos -= 1
