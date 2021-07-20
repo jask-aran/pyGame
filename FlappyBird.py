@@ -15,7 +15,6 @@ clock = pygame.time.Clock()
 # import and scale background image
 background = pygame.image.load('assets/background-day.png').convert()
 background = pygame.transform.scale2x(background)
-background_xpos = 0
 
 # import and scale floor image
 floorSurface = pygame.image.load('assets/base.png').convert()
@@ -55,3 +54,5 @@ while True:
 
     pygame.display.update()
     clock.tick(120)
+
+# watch this shit
