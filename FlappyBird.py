@@ -7,6 +7,9 @@ pygame.init()
 screen = pygame.display.set_mode((576, 1024))
 clock = pygame.time.Clock()
 
+# import texture
+endText = pygame.image.load('assets/suck.png').convert()
+
 # import background
 backgroundSurface = pygame.image.load('assets/background-day.png').convert()
 backgroundSurface = pygame.transform.scale2x(backgroundSurface)
@@ -109,6 +112,8 @@ while True:
         # pipe moving
         pipeList = pipeMove(pipeList)
         pipeDraw(pipeList)
+    else:
+        screen.blit(endText, (65, 100))
 
     # moove the floor back to the start when it leaves the screen
     floor_xpos -= 1
