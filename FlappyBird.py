@@ -73,6 +73,10 @@ def scoreDisplay(gameState):
         highScoreRect = highScoreSurface.get_rect(center=(288, 850))
         screen.blit(highScoreSurface, highScoreRect)
 
+        suckSurface = font.render('Try harder you wanker', True, (255, 255, 255))
+        suckRect = suckSurface.get_rect(center=(288, 800))
+        screen.blit(suckSurface, suckRect)
+
 
 def scoreUpdate(score, highScore):
     if score > highScore:
