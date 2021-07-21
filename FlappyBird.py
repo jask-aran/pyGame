@@ -59,8 +59,25 @@ def birdAnimation():
     return newBird, newBirdRect
 
 
-def scoreDisplay():
-    scoreSurface = font.render('Score', True, (255, 255, 255))
+def scoreDisplay(gameState):
+    if gameState == 'mainGame':
+        scoreSurface = font.render(str(int(score)), True, (255, 255, 255))
+        scoreRect = scoreSurface.get_rect(center=(288, 100))
+        screen.blit(scoreSurface, scoreRect)
+    if gameState == 'gameOver':
+        scoreSurface = font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        scoreRect = scoreSurface.get_rect(center=(288, 100))
+        screen.blit(scoreSurface, scoreRect)
+
+        highScoreSurface = font.render(f'High Score: {int(highScore)}', True, (255, 255, 255))
+        highScoreRect = highScoreSurface.get_rect(center=(288, 850))
+        screen.blit(highScoreSurface, highScoreRect)
+
+
+def scoreUpdate(score, highScore):
+    if score > highScore:
+        highScore = score
+    return highScore
 
 
 # import texture
@@ -124,6 +141,7 @@ while True:
                 birdMovement = 0
                 birdMovement -= 4
                 birdRect.center = (100, 512)
+                score = 0
 
         if event.type == SPAWNPIPE:
             pipeList.extend(pipeCreate())
@@ -153,8 +171,12 @@ while True:
         # pipe moving
         pipeList = pipeMove(pipeList)
         pipeDraw(pipeList)
+        score += 0.01
+        scoreDisplay('mainGame')
     else:
-        screen.blit(endText, (65, 100))
+        highScore = scoreUpdate(score, highScore)
+        scoreDisplay('gameOver')
+        screen.blit(endText, (65, 250))
 
     # moove the floor back to the start when it leaves the screen
     floor_xpos -= 1
