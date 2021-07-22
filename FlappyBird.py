@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 
+fuckyou = (0, 1, 2)
+
 # initialisation
 pygame.init()
 screen = pygame.display.set_mode((576, 1024))
@@ -193,3 +195,4 @@ while True:
     clock.tick(120)
 
 # watch this shit
+# lmfao
